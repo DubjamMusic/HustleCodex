@@ -55,7 +55,7 @@ export default function Forum() {
       setIsUsernameSet(true);
       // Add welcome message
       const welcomeMsg: Message = {
-        id: Date.now().toString(),
+        id: crypto.randomUUID(),
         username: "System",
         content: `${username} has joined the chat!`,
         timestamp: new Date(),
@@ -68,7 +68,7 @@ export default function Forum() {
     e.preventDefault();
     if (newMessage.trim() && username) {
       const message: Message = {
-        id: Date.now().toString(),
+        id: crypto.randomUUID(),
         username,
         content: newMessage,
         timestamp: new Date(),
@@ -82,7 +82,7 @@ export default function Forum() {
     e.preventDefault();
     if (newPostTitle.trim() && newPostContent.trim() && username) {
       const post: ForumPost = {
-        id: Date.now().toString(),
+        id: crypto.randomUUID(),
         title: newPostTitle,
         content: newPostContent,
         author: username,
