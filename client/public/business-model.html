@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HustleCodex Business Model Canvas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: #e0e0e0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #00d9ff;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #a0a0a0;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .reality-check {
+            background: rgba(255, 50, 50, 0.1);
+            border-left: 4px solid #ff3232;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        
+        .reality-check h3 {
+            color: #ff6b6b;
+            margin-bottom: 8px;
+        }
+        
+        .canvas-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(2, auto);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .canvas-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .canvas-section:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 217, 255, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.2);
+        }
+        
+        .canvas-section h2 {
+            color: #00d9ff;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 217, 255, 0.3);
+            padding-bottom: 8px;
+        }
+        
+        .canvas-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .canvas-section li {
+            padding: 8px 0;
+            color: #c0c0c0;
+            font-size: 0.95em;
+            line-height: 1.5;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .canvas-section li:before {
+            content: "▹";
+            position: absolute;
+            left: 0;
+            color: #00d9ff;
+            font-weight: bold;
+        }
+        
+        .implemented {
+            color: #4ade80 !important;
+            font-weight: 500;
+        }
+        
+        .implemented:before {
+            content: "✓" !important;
+        }
+        
+        .missing {
+            color: #ff6b6b !important;
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        
+        .missing:before {
+            content: "✗" !important;
+        }
+        
+        .key-partners { grid-column: 1; grid-row: 1 / 3; }
+        .key-activities { grid-column: 2; grid-row: 1; }
+        .value-propositions { grid-column: 3; grid-row: 1 / 3; background: rgba(0, 217, 255, 0.1); }
+        .customer-relationships { grid-column: 4; grid-row: 1; }
+        .customer-segments { grid-column: 5; grid-row: 1 / 3; }
+        .key-resources { grid-column: 2; grid-row: 2; }
+        .channels { grid-column: 4; grid-row: 2; }
+        
+        .revenue-costs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .cost-structure, .revenue-streams {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 217, 255, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .revenue-streams {
+            border-color: rgba(74, 222, 128, 0.3);
+        }
+        
+        .revenue-streams h2 {
+            color: #4ade80;
+        }
+        
+        .metric {
+            display: inline-block;
+            background: rgba(0, 217, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-left: 8px;
+            color: #00d9ff;
+        }
+        
+        .priority-badge {
+            display: inline-block;
+            background: rgba(255, 107, 107, 0.2);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.75em;
+            margin-left: 8px;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+        
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .legend-dot.green { background: #4ade80; }
+        .legend-dot.red { background: #ff6b6b; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌟 HustleCodex Business Model Canvas</h1>
+        <p class="subtitle">Reality-Checked Against Actual Repository State</p>
+        
+        <div class="reality-check">
+            <h3>⚠️ Critical Reality Check</h3>
+            <p>This canvas reflects what ACTUALLY EXISTS in the codebase, not aspirational architecture. Green items are implemented; red items are missing/incomplete.</p>
+        </div>
+        
+        <div class="canvas-grid">
+            <!-- Key Partners -->
+            <div class="canvas-section key-partners">
+                <h2>Key Partners</h2>
+                <ul>
+                    <li class="implemented">Stripe (payment processing)</li>
+                    <li class="implemented">Supabase (backend infrastructure)</li>
+                    <li class="implemented">Vercel (hosting & deployment)</li>
+                    <li class="missing">PostHog/Mixpanel (analytics)</li>
+                    <li class="missing">Recovery clinics (B2B)</li>
+                    <li class="missing">Content creators (quest packs)</li>
+                </ul>
+            </div>
+            
+            <!-- Key Activities -->
+            <div class="canvas-section key-activities">
+                <h2>Key Activities</h2>
+                <ul>
+                    <li class="implemented">Platform development (Next.js)</li>
+                    <li class="implemented">Mobile app maintenance (React Native)</li>
+                    <li class="implemented">AI Twin chat system</li>
+                    <li class="implemented">Decision Simulator</li>
+                    <li class="missing">Real-time quest sync</li>
+                    <li class="missing">Community moderation</li>
+                    <li class="missing">Customer support</li>
+                </ul>
+            </div>
+            
+            <!-- Value Propositions -->
+            <div class="canvas-section value-propositions">
+                <h2>Value Propositions</h2>
+                <ul>
+                    <li class="implemented"><strong>Golden Globe Console</strong> - Premium access system ($500-$5K)</li>
+                    <li class="implemented"><strong>AI Twin Chat</strong> - Personalized AI companion</li>
+                    <li class="implemented"><strong>Decision Simulator</strong> - Consequence modeling</li>
+                    <li class="implemented"><strong>Quest System</strong> - Gamified recovery tracking<span class="priority-badge">MVP NEEDED</span></li>
+                    <li class="missing"><strong>Real-time sync</strong> - Cross-platform continuity</li>
+                    <li class="missing"><strong>Community</strong> - Peer support network</li>
+                </ul>
+            </div>
+            
+            <!-- Customer Relationships -->
+            <div class="canvas-section customer-relationships">
+                <h2>Customer Relationships</h2>
+                <ul>
+                    <li class="implemented">Self-service platform (web + mobile)</li>
+                    <li class="implemented">Automated AI interactions</li>
+                    <li class="missing">Email drip campaigns</li>
+                    <li class="missing">Premium support for Golden Globe</li>
+                    <li class="missing">Community forums</li>
+                    <li class="missing">1-on-1 coaching (future)</li>
+                </ul>
+            </div>
+            
+            <!-- Customer Segments -->
+            <div class="canvas-section customer-segments">
+                <h2>Customer Segments</h2>
+                <ul>
+                    <li><strong>Primary:</strong> Individuals in recovery (addiction, ADHD)</li>
+                    <li><strong>Secondary:</strong> Personal development enthusiasts</li>
+                    <li><strong>Tertiary:</strong> Life coaches (potential B2B)</li>
+                    <li class="missing"><strong>Future:</strong> Recovery clinics (B2B licensing)</li>
+                    <li class="missing"><strong>Future:</strong> Corporate wellness programs</li>
+                </ul>
+            </div>
+            
+            <!-- Key Resources -->
+            <div class="canvas-section key-resources">
+                <h2>Key Resources</h2>
+                <ul>
+                    <li class="implemented">Codebase (5 repos, well-documented)</li>
+                    <li class="implemented">Stripe integration (production-ready)</li>
+                    <li class="implemented">Supabase database (schema defined)</li>
+                    <li class="implemented">AI APIs (GPT-4, Claude access)</li>
+                    <li class="missing">User behavioral data (no analytics)</li>
+                    <li class="missing">Content library (quest templates)</li>
+                </ul>
+            </div>
+            
+            <!-- Channels -->
+            <div class="canvas-section channels">
+                <h2>Channels</h2>
+                <ul>
+                    <li class="implemented">Web platform (hustlecodex-platform)</li>
+                    <li class="implemented">Mobile app (iOS + Android)</li>
+                    <li class="missing">WhatsApp/Telegram (via OpenClaw)<span class="priority-badge">NO INTEGRATION</span></li>
+                    <li class="missing">Social media</li>
+                    <li class="missing">Content marketing (SEO)</li>
+                    <li class="missing">Recovery community partnerships</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Cost Structure & Revenue Streams -->
+        <div class="revenue-costs">
+            <div class="cost-structure">
+                <h2>Cost Structure</h2>
+                <ul>
+                    <li class="implemented">Vercel hosting<span class="metric">~$20/mo</span></li>
+                    <li class="implemented">Supabase Pro<span class="metric">~$25/mo</span></li>
+                    <li class="implemented">Stripe fees<span class="metric">2.9% + $0.30</span></li>
+                    <li class="implemented">Domain & SSL<span class="metric">~$15/mo</span></li>
+                    <li class="missing">Analytics (PostHog)<span class="metric">$0-$200/mo</span></li>
+                    <li class="missing">AI API costs<span class="metric">Usage-based</span></li>
+                    <li class="missing">Customer support tools<span class="metric">TBD</span></li>
+                    <li><strong>Current burn rate:</strong><span class="metric">~$80/mo</span></li>
+                </ul>
+            </div>
+            
+            <div class="revenue-streams">
+                <h2>Revenue Streams</h2>
+                <ul>
+                    <li class="implemented"><strong>Golden Globe Console</strong>
+                        <ul>
+                            <li>Bronze Tier: $500 (3 months)</li>
+                            <li>Silver Tier: $1,500 (12 months)</li>
+                            <li>Gold Tier: $5,000 (lifetime)</li>
+                        </ul>
+                    </li>
+                    <li class="missing"><strong>Subscription Model</strong> - $9/mo (not launched)</li>
+                    <li class="missing"><strong>Quest Packs</strong> - $19-$29 each (concept only)</li>
+                    <li class="missing"><strong>B2B Licensing</strong> - $299/mo per clinic (no integration)</li>
+                    <li><strong>Target MRR (Month 3):</strong><span class="metric">$1,500</span></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-dot green"></span>
+                <span>Implemented (production-ready)</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot red"></span>
+                <span>Missing/Incomplete (requires development)</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
