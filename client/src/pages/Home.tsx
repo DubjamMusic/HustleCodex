@@ -1,5 +1,4 @@
 import { ArrowRight, Zap, Grid3x3, Code2 } from "lucide-react";
-import { Link } from "wouter";
 
 export default function Home() {
   return (
@@ -29,6 +28,7 @@ export default function Home() {
             <nav className="hidden md:flex gap-8">
               <a href="#" className="text-sm text-gray-400 hover:text-cyan-400 transition">Dashboard</a>
               <a href="#pages" className="text-sm text-gray-400 hover:text-cyan-400 transition">Explore</a>
+              <a href="/forum" className="text-sm text-gray-400 hover:text-cyan-400 transition">Forum</a>
             </nav>
           </div>
         </header>
@@ -52,62 +52,58 @@ export default function Home() {
           {/* Navigation Cards */}
           <div id="pages" className="grid md:grid-cols-2 gap-8 mb-20">
             {/* Business Model Card */}
-            <Link href="/business-model.html">
-              <a className="group relative overflow-hidden rounded-xl border border-cyan-500/20 bg-gradient-to-br from-slate-900/50 to-slate-800/50 p-8 hover:border-cyan-500/60 transition-all duration-300 cursor-pointer">
-                {/* Glow effect on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-cyan-500/0 group-hover:from-cyan-500/10 group-hover:to-cyan-500/5 transition-all duration-300" />
-                
-                {/* Content */}
-                <div className="relative z-10">
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="p-3 bg-cyan-500/10 rounded-lg group-hover:bg-cyan-500/20 transition">
-                      <Grid3x3 className="w-6 h-6 text-cyan-400" />
-                    </div>
-                    <ArrowRight className="w-5 h-5 text-cyan-400 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all" />
+            <a href="/business-model.html" className="group relative overflow-hidden rounded-xl border border-cyan-500/20 bg-gradient-to-br from-slate-900/50 to-slate-800/50 p-8 hover:border-cyan-500/60 transition-all duration-300 cursor-pointer block">
+              {/* Glow effect on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-cyan-500/0 group-hover:from-cyan-500/10 group-hover:to-cyan-500/5 transition-all duration-300" />
+              
+              {/* Content */}
+              <div className="relative z-10">
+                <div className="flex items-start justify-between mb-6">
+                  <div className="p-3 bg-cyan-500/10 rounded-lg group-hover:bg-cyan-500/20 transition">
+                    <Grid3x3 className="w-6 h-6 text-cyan-400" />
                   </div>
-                  
-                  <h3 className="text-2xl font-bold mb-3 text-white">Business Model Canvas</h3>
-                  <p className="text-gray-400 mb-6 leading-relaxed">
-                    Discover the strategic framework behind HustleCodex. Explore our value propositions, customer segments, revenue streams, and key partnerships.
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Strategy</span>
-                    <span className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Business Model</span>
-                    <span className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Revenue</span>
-                  </div>
+                  <ArrowRight className="w-5 h-5 text-cyan-400 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all" />
                 </div>
-              </a>
-            </Link>
+                
+                <h3 className="text-2xl font-bold mb-3 text-white">Business Model Canvas</h3>
+                <p className="text-gray-400 mb-6 leading-relaxed">
+                  Discover the strategic framework behind HustleCodex. Explore our value propositions, customer segments, revenue streams, and key partnerships.
+                </p>
+                
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Strategy</span>
+                  <span className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Business Model</span>
+                  <span className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Revenue</span>
+                </div>
+              </div>
+            </a>
 
             {/* Technical Architecture Card */}
-            <Link href="/architecture.html">
-              <a className="group relative overflow-hidden rounded-xl border border-purple-500/20 bg-gradient-to-br from-slate-900/50 to-slate-800/50 p-8 hover:border-purple-500/60 transition-all duration-300 cursor-pointer">
-                {/* Glow effect on hover */}
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/0 group-hover:from-purple-500/10 group-hover:to-purple-500/5 transition-all duration-300" />
-                
-                {/* Content */}
-                <div className="relative z-10">
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="p-3 bg-purple-500/10 rounded-lg group-hover:bg-purple-500/20 transition">
-                      <Code2 className="w-6 h-6 text-purple-400" />
-                    </div>
-                    <ArrowRight className="w-5 h-5 text-purple-400 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all" />
+            <a href="/architecture.html" className="group relative overflow-hidden rounded-xl border border-purple-500/20 bg-gradient-to-br from-slate-900/50 to-slate-800/50 p-8 hover:border-purple-500/60 transition-all duration-300 cursor-pointer block">
+              {/* Glow effect on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/0 group-hover:from-purple-500/10 group-hover:to-purple-500/5 transition-all duration-300" />
+              
+              {/* Content */}
+              <div className="relative z-10">
+                <div className="flex items-start justify-between mb-6">
+                  <div className="p-3 bg-purple-500/10 rounded-lg group-hover:bg-purple-500/20 transition">
+                    <Code2 className="w-6 h-6 text-purple-400" />
                   </div>
-                  
-                  <h3 className="text-2xl font-bold mb-3 text-white">Technical Architecture</h3>
-                  <p className="text-gray-400 mb-6 leading-relaxed">
-                    Deep dive into the technical infrastructure. Understand our system design, technology stack, and architectural decisions that power HustleCodex.
-                  </p>
-                  
-                  <div className="flex flex-wrap gap-2">
-                    <span className="px-3 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">Architecture</span>
-                    <span className="px-3 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">Infrastructure</span>
-                    <span className="px-3 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">Tech Stack</span>
-                  </div>
+                  <ArrowRight className="w-5 h-5 text-purple-400 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all" />
                 </div>
-              </a>
-            </Link>
+                
+                <h3 className="text-2xl font-bold mb-3 text-white">Technical Architecture</h3>
+                <p className="text-gray-400 mb-6 leading-relaxed">
+                  Deep dive into the technical infrastructure. Understand our system design, technology stack, and architectural decisions that power HustleCodex.
+                </p>
+                
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">Architecture</span>
+                  <span className="px-3 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">Infrastructure</span>
+                  <span className="px-3 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">Tech Stack</span>
+                </div>
+              </div>
+            </a>
           </div>
 
           {/* Features Section */}
