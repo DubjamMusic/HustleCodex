@@ -9,7 +9,7 @@ interface Message {
   id: string;
   username: string;
   content: string;
-  timestamp: Date;
+  timestamp: string;
 }
 
 interface ForumPost {
@@ -17,25 +17,48 @@ interface ForumPost {
   title: string;
   content: string;
   author: string;
-  timestamp: Date;
+  timestamp: string;
   replies: number;
 }
 
+const STORAGE_KEY_MESSAGES = "hustlecodex_chat_messages";
+const STORAGE_KEY_POSTS = "hustlecodex_forum_posts";
+const STORAGE_KEY_USERNAME = "hustlecodex_username";
+
+const DEFAULT_POST: ForumPost = {
+  id: "1",
+  title: "Welcome to HustleCodex Forum!",
+  content:
+    "This is the official forum for HustleCodex community. Share your ideas, ask questions, and connect with other members.",
+  author: "Admin",
+  timestamp: new Date("2024-01-01T00:00:00.000Z").toISOString(),
+  replies: 0,
+};
+
+function loadFromStorage<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? (JSON.parse(raw) as T) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 export default function Forum() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(() =>
+    loadFromStorage<Message[]>(STORAGE_KEY_MESSAGES, [])
+  );
   const [newMessage, setNewMessage] = useState("");
-  const [username, setUsername] = useState("");
-  const [isUsernameSet, setIsUsernameSet] = useState(false);
-  const [forumPosts, setForumPosts] = useState<ForumPost[]>([
-    {
-      id: "1",
-      title: "Welcome to HustleCodex Forum!",
-      content: "This is the official forum for HustleCodex community. Share your ideas, ask questions, and connect with other members.",
-      author: "Admin",
-      timestamp: new Date(),
-      replies: 0,
-    },
-  ]);
+  const [username, setUsername] = useState(
+    () => localStorage.getItem(STORAGE_KEY_USERNAME) ?? ""
+  );
+  const [isUsernameSet, setIsUsernameSet] = useState(
+    () => !!localStorage.getItem(STORAGE_KEY_USERNAME)
+  );
+  const [forumPosts, setForumPosts] = useState<ForumPost[]>(() => {
+    const saved = loadFromStorage<ForumPost[]>(STORAGE_KEY_POSTS, []);
+    return saved.length > 0 ? saved : [DEFAULT_POST];
+  });
   const [newPostTitle, setNewPostTitle] = useState("");
   const [newPostContent, setNewPostContent] = useState("");
   const [showNewPostForm, setShowNewPostForm] = useState(false);
@@ -49,16 +72,25 @@ export default function Forum() {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_MESSAGES, JSON.stringify(messages));
+  }, [messages]);
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_POSTS, JSON.stringify(forumPosts));
+  }, [forumPosts]);
+
   const handleSetUsername = (e: React.FormEvent) => {
     e.preventDefault();
     if (username.trim()) {
+      localStorage.setItem(STORAGE_KEY_USERNAME, username.trim());
+      setUsername(username.trim());
       setIsUsernameSet(true);
-      // Add welcome message
       const welcomeMsg: Message = {
         id: crypto.randomUUID(),
         username: "System",
-        content: `${username} has joined the chat!`,
-        timestamp: new Date(),
+        content: `${username.trim()} has joined the chat!`,
+        timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, welcomeMsg]);
     }
@@ -71,7 +103,7 @@ export default function Forum() {
         id: crypto.randomUUID(),
         username,
         content: newMessage,
-        timestamp: new Date(),
+        timestamp: new Date().toISOString(),
       };
       setMessages((prev) => [...prev, message]);
       setNewMessage("");
@@ -86,7 +118,7 @@ export default function Forum() {
         title: newPostTitle,
         content: newPostContent,
         author: username,
-        timestamp: new Date(),
+        timestamp: new Date().toISOString(),
         replies: 0,
       };
       setForumPosts((prev) => [post, ...prev]);
@@ -96,8 +128,8 @@ export default function Forum() {
     }
   };
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("en-US", {
+  const formatTime = (ts: string) => {
+    return new Date(ts).toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
     });

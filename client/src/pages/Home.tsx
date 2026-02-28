@@ -1,6 +1,9 @@
-import { ArrowRight, Zap, Grid3x3, Code2 } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, Zap, Grid3x3, Code2, Menu, X } from "lucide-react";
 
 export default function Home() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-gray-100 overflow-hidden">
       {/* Animated background grid */}
@@ -26,12 +29,30 @@ export default function Home() {
               </h1>
             </div>
             <nav className="hidden md:flex gap-8">
-              <a href="#" className="text-sm text-gray-400 hover:text-cyan-400 transition">Dashboard</a>
+              <a href="/" className="text-sm text-gray-400 hover:text-cyan-400 transition">Dashboard</a>
               <a href="#pages" className="text-sm text-gray-400 hover:text-cyan-400 transition">Explore</a>
               <a href="/forum" className="text-sm text-gray-400 hover:text-cyan-400 transition">Forum</a>
             </nav>
+            <button
+              className="md:hidden p-2 text-gray-400 hover:text-cyan-400 transition"
+              onClick={() => setMobileMenuOpen((o) => !o)}
+              aria-label="Toggle navigation"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
         </header>
+
+        {/* Mobile navigation menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-b border-cyan-500/20 bg-slate-950/95 backdrop-blur-sm">
+            <nav className="max-w-6xl mx-auto px-6 py-4 flex flex-col gap-4">
+              <a href="/" className="text-sm text-gray-400 hover:text-cyan-400 transition" onClick={() => setMobileMenuOpen(false)}>Dashboard</a>
+              <a href="#pages" className="text-sm text-gray-400 hover:text-cyan-400 transition" onClick={() => setMobileMenuOpen(false)}>Explore</a>
+              <a href="/forum" className="text-sm text-gray-400 hover:text-cyan-400 transition" onClick={() => setMobileMenuOpen(false)}>Forum</a>
+            </nav>
+          </div>
+        )}
 
         {/* Hero Section */}
         <section className="max-w-6xl mx-auto px-6 py-20 md:py-32">
@@ -143,9 +164,9 @@ export default function Home() {
               <div>
                 <h5 className="font-semibold text-gray-300 mb-4">Explore</h5>
                 <ul className="space-y-2 text-sm text-gray-400">
-                  <li><a href="#" className="hover:text-cyan-400 transition">Business Model</a></li>
-                  <li><a href="#" className="hover:text-cyan-400 transition">Architecture</a></li>
-                  <li><a href="#" className="hover:text-cyan-400 transition">Dashboard</a></li>
+                  <li><a href="/business-model.html" className="hover:text-cyan-400 transition">Business Model</a></li>
+                  <li><a href="/architecture.html" className="hover:text-cyan-400 transition">Architecture</a></li>
+                  <li><a href="/forum" className="hover:text-cyan-400 transition">Forum</a></li>
                 </ul>
               </div>
               <div>
