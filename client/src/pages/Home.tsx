@@ -26,7 +26,7 @@ export default function Home() {
               </h1>
             </div>
             <nav className="hidden md:flex gap-8">
-              <a href="#" className="text-sm text-gray-400 hover:text-cyan-400 transition">Dashboard</a>
+              <a href="/features.html" className="text-sm text-gray-400 hover:text-cyan-400 transition">Features</a>
               <a href="#pages" className="text-sm text-gray-400 hover:text-cyan-400 transition">Explore</a>
               <a href="/forum" className="text-sm text-gray-400 hover:text-cyan-400 transition">Forum</a>
             </nav>
@@ -50,7 +50,7 @@ export default function Home() {
           </div>
 
           {/* Navigation Cards */}
-          <div id="pages" className="grid md:grid-cols-2 gap-8 mb-20">
+          <div id="pages" className="grid md:grid-cols-3 gap-8 mb-20">
             {/* Business Model Card */}
             <a href="/business-model.html" className="group relative overflow-hidden rounded-xl border border-cyan-500/20 bg-gradient-to-br from-slate-900/50 to-slate-800/50 p-8 hover:border-cyan-500/60 transition-all duration-300 cursor-pointer block">
               {/* Glow effect on hover */}
@@ -74,6 +74,31 @@ export default function Home() {
                   <span className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Strategy</span>
                   <span className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Business Model</span>
                   <span className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Revenue</span>
+                </div>
+              </div>
+            </a>
+
+            {/* Feature Playbook Card */}
+            <a href="/features.html" className="group relative overflow-hidden rounded-xl border border-emerald-500/20 bg-gradient-to-br from-slate-900/50 to-slate-800/50 p-8 hover:border-emerald-500/60 transition-all duration-300 cursor-pointer block">
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/0 to-emerald-500/0 group-hover:from-emerald-500/10 group-hover:to-emerald-500/5 transition-all duration-300" />
+
+              <div className="relative z-10">
+                <div className="flex items-start justify-between mb-6">
+                  <div className="p-3 bg-emerald-500/10 rounded-lg group-hover:bg-emerald-500/20 transition">
+                    <Zap className="w-6 h-6 text-emerald-400" />
+                  </div>
+                  <ArrowRight className="w-5 h-5 text-emerald-400 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-1 transition-all" />
+                </div>
+
+                <h3 className="text-2xl font-bold mb-3 text-white">Feature Playbook</h3>
+                <p className="text-gray-400 mb-6 leading-relaxed">
+                  Public page with feature highlights, demo-ready use cases, implementation steps, and recommended upgrades.
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  <span className="px-3 py-1 text-xs bg-emerald-500/20 text-emerald-200 rounded-full border border-emerald-500/30">Use Cases</span>
+                  <span className="px-3 py-1 text-xs bg-emerald-500/20 text-emerald-200 rounded-full border border-emerald-500/30">Steps</span>
+                  <span className="px-3 py-1 text-xs bg-emerald-500/20 text-emerald-200 rounded-full border border-emerald-500/30">Upgrades</span>
                 </div>
               </div>
             </a>
