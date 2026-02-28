@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HustleCodex Public Feature Playbook</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0f172a;
+      --panel: rgba(15, 23, 42, 0.7);
+      --card: rgba(30, 41, 59, 0.7);
+      --border: rgba(34, 211, 238, 0.2);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #22d3ee;
+      --accent-2: #60a5fa;
+      --positive: #34d399;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(34, 211, 238, 0.08), transparent 35%),
+                  radial-gradient(circle at 80% 10%, rgba(96, 165, 250, 0.08), transparent 35%),
+                  radial-gradient(circle at 70% 70%, rgba(34, 197, 94, 0.08), transparent 40%),
+                  linear-gradient(135deg, #0b1224 0%, #0f172a 50%, #0b1224 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel);
+      box-shadow: 0 10px 60px rgba(34, 211, 238, 0.12);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      color: var(--muted);
+      max-width: 860px;
+      line-height: 1.5;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(34, 211, 238, 0.12);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    section {
+      margin-top: 24px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel);
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: #e0f2fe;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      background: var(--card);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card h3 {
+      font-size: 1.05rem;
+      color: #e2e8f0;
+    }
+
+    .card p {
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.95rem;
+    }
+
+    .list {
+      display: grid;
+      gap: 10px;
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .list li {
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .step {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .step span {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      background: rgba(34, 211, 238, 0.12);
+      color: var(--accent);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .muted { color: var(--muted); }
+    .badge { color: var(--positive); font-weight: 700; }
+
+    @media (max-width: 640px) {
+      body { padding: 14px; }
+      header, section { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="pill">Public Feature Playbook</div>
+      <h1>HustleCodex — Ready-to-Share Features, Use Cases, and Next Steps</h1>
+      <p>Use this page to share what is publicly available today, demonstrate live use cases, and outline the exact steps and upgrade ideas to keep the experience improving without overstating what exists.</p>
+      <div class="muted">Links: <a href="/">Home</a> • <a href="/forum">Forum</a> • <a href="/business-model.html">Business Model</a> • <a href="/architecture.html">Architecture</a></div>
+    </header>
+
+    <section>
+      <h2>What’s Public Right Now</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Strategic Dashboard</h3>
+          <p>Landing page that spotlights the HustleCodex story and routes to strategic and technical docs for stakeholders.</p>
+        </div>
+        <div class="card">
+          <h3>Community Forum</h3>
+          <p>Open discussion board with live chat so visitors can post topics and chat in real time once they pick a username.</p>
+        </div>
+        <div class="card">
+          <h3>Static Documentation</h3>
+          <p>Business model and architecture walkthroughs, available as public HTML for easy sharing and async review.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Use Case Examples</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Stakeholder Walkthrough</h3>
+          <p>Share <a href="/business-model.html">business-model.html</a> alongside <a href="/architecture.html">architecture.html</a> to show both the strategy and the technical footprint.</p>
+          <p class="muted">Outcome: clear context for advisors or investors without needing local setup.</p>
+        </div>
+        <div class="card">
+          <h3>Live Brainstorm</h3>
+          <p>Have participants join the <a href="/forum">forum</a>, set a username, create a post, and use the live chat thread to capture rapid feedback.</p>
+          <p class="muted">Outcome: quick idea capture with asynchronous follow-up in the same space.</p>
+        </div>
+        <div class="card">
+          <h3>Feature Validation</h3>
+          <p>Publish a short prompt in the forum describing a proposed upgrade, then gather replies and real-time reactions in chat.</p>
+          <p class="muted">Outcome: validate desirability before spending build time.</p>
+        </div>
+        <div class="card">
+          <h3>Release Notes Drop</h3>
+          <p>Post a summary link in the forum and point readers to the relevant static doc for architecture or roadmap changes.</p>
+          <p class="muted">Outcome: single public surface for updates without needing a login.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Steps to Use and Demo Correctly</h2>
+      <div class="list">
+        <div class="step">
+          <span>1</span>
+          <div>
+            <strong>Install dependencies</strong>
+            <p class="muted">Run <code>corepack pnpm install --frozen-lockfile</code> from the repo root to match the locked versions.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span>2</span>
+          <div>
+            <strong>Start locally</strong>
+            <p class="muted">Use <code>pnpm dev</code> and open <code>http://localhost:5173</code>. Verify <code>/forum</code>, <code>/features.html</code>, <code>/business-model.html</code>, and <code>/architecture.html</code> all load.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span>3</span>
+          <div>
+            <strong>Demo the forum</strong>
+            <p class="muted">Set a username, create a post, and send a chat message to show the live UI flow.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span>4</span>
+          <div>
+            <strong>Share publicly</strong>
+            <p class="muted">Deploy the build output so these HTML pages stay public-facing. Keep links consistent with the navigation on the home page.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Suggested Upgrades (Safe to Share)</h2>
+      <ul class="list">
+        <li><strong>Add persistence to the forum</strong> — back chat and posts with an API + database so contributions survive refreshes.</li>
+        <li><strong>Introduce lightweight auth</strong> — optional sign-in to manage identities while keeping a guest flow for quick demos.</li>
+        <li><strong>Instrumentation</strong> — wire analytics and error monitoring before inviting wider traffic.</li>
+        <li><strong>Content refresh cadence</strong> — keep business-model and architecture pages updated when scope changes.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Fast Facts</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Visibility</h3>
+          <p class="muted">All linked pages are static or client-rendered, so they can be safely shared without credentials.</p>
+        </div>
+        <div class="card">
+          <h3>Minimal Setup</h3>
+          <p class="muted">Only Node + pnpm needed locally; no external services are required to view the experience.</p>
+        </div>
+        <div class="card">
+          <h3>Next Recommended Move</h3>
+          <p class="muted"><span class="badge">Do next:</span> persist forum data and add analytics before promoting widely.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
