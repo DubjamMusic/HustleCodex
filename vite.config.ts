@@ -30,20 +30,20 @@ function trimLogFile(logPath: string, maxSize: number) {
       return;
     }
 
-    const lines = fs.readFileSync(logPath, "utf-8").split("\n");
-    const keptLines: string[] = [];
-    let keptBytes = 0;
+    const logFileLines = fs.readFileSync(logPath, "utf-8").split("\n");
+    const retainedLogLines: string[] = [];
+    let retainedByteCount = 0;
 
     // Keep newest lines (from end) that fit within 60% of maxSize
-    const targetSize = TRIM_TARGET_BYTES;
-    for (let i = lines.length - 1; i >= 0; i--) {
-      const lineBytes = Buffer.byteLength(`${lines[i]}\n`, "utf-8");
-      if (keptBytes + lineBytes > targetSize) break;
-      keptLines.unshift(lines[i]);
-      keptBytes += lineBytes;
+    const maxRetainedBytes = TRIM_TARGET_BYTES;
+    for (let i = logFileLines.length - 1; i >= 0; i--) {
+      const currentLineByteSize = Buffer.byteLength(`${logFileLines[i]}\n`, "utf-8");
+      if (retainedByteCount + currentLineByteSize > maxRetainedBytes) break;
+      retainedLogLines.unshift(logFileLines[i]);
+      retainedByteCount += currentLineByteSize;
     }
 
-    fs.writeFileSync(logPath, keptLines.join("\n"), "utf-8");
+    fs.writeFileSync(logPath, retainedLogLines.join("\n"), "utf-8");
   } catch {
     /* ignore trim errors */
   }
@@ -104,7 +104,7 @@ function vitePluginManusDebugCollector(): Plugin {
           return next();
         }
 
-        const handlePayload = (payload: any) => {
+        const processLogPayload = (payload: any) => {
           // Write logs directly to files
           if (payload.consoleLogs?.length > 0) {
             writeToLogFile("browserConsole", payload.consoleLogs);
@@ -120,10 +120,10 @@ function vitePluginManusDebugCollector(): Plugin {
           res.end(JSON.stringify({ success: true }));
         };
 
-        const reqBody = (req as { body?: unknown }).body;
-        if (reqBody && typeof reqBody === "object") {
+        const parsedRequestBody = (req as { body?: unknown }).body;
+        if (parsedRequestBody && typeof parsedRequestBody === "object") {
           try {
-            handlePayload(reqBody);
+            processLogPayload(parsedRequestBody);
           } catch (e) {
             res.writeHead(400, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ success: false, error: String(e) }));
@@ -131,15 +131,15 @@ function vitePluginManusDebugCollector(): Plugin {
           return;
         }
 
-        let body = "";
+        let requestBody = "";
         req.on("data", (chunk) => {
-          body += chunk.toString();
+          requestBody += chunk.toString();
         });
 
         req.on("end", () => {
           try {
-            const payload = JSON.parse(body);
-            handlePayload(payload);
+            const payload = JSON.parse(requestBody);
+            processLogPayload(payload);
           } catch (e) {
             res.writeHead(400, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ success: false, error: String(e) }));

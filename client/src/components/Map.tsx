@@ -125,7 +125,7 @@ export function MapView({
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<google.maps.Map | null>(null);
 
-  const init = usePersistFn(async () => {
+  const initializeMap = usePersistFn(async () => {
     await loadMapScript();
     if (!mapContainer.current) {
       console.error("Map container not found");
@@ -146,8 +146,8 @@ export function MapView({
   });
 
   useEffect(() => {
-    init();
-  }, [init]);
+    initializeMap();
+  }, [initializeMap]);
 
   return (
     <div ref={mapContainer} className={cn("w-full h-[500px]", className)} />
