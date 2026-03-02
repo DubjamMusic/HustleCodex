@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import PageLayout from "@/components/PageLayout";
 
 interface Message {
   id: string;
@@ -105,7 +106,7 @@ export default function Forum() {
 
   if (!isUsernameSet) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-gray-100 flex items-center justify-center p-6">
+      <PageLayout className="flex items-center justify-center p-6">
         <Card className="w-full max-w-md bg-slate-900/80 border-cyan-500/20">
           <CardHeader>
             <CardTitle className="text-2xl text-center bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
@@ -136,12 +137,12 @@ export default function Forum() {
             </form>
           </CardContent>
         </Card>
-      </div>
+      </PageLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-gray-100">
+    <PageLayout>
       {/* Header */}
       <header className="border-b border-cyan-500/20 backdrop-blur-sm sticky top-0 z-50 bg-slate-950/80">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -304,6 +305,6 @@ export default function Forum() {
           </div>
         </div>
       </div>
-    </div>
+    </PageLayout>
   );
 }

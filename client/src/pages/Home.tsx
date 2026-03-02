@@ -1,8 +1,46 @@
+import { type ReactNode } from "react";
 import { ArrowRight, Zap, Grid3x3, Code2 } from "lucide-react";
+import PageLayout from "@/components/PageLayout";
+
+interface FeatureCardProps {
+  icon: ReactNode;
+  title: string;
+  description: string;
+}
+
+function FeatureCard({ icon, title, description }: FeatureCardProps) {
+  return (
+    <div className="p-6 rounded-lg border border-gray-800 bg-slate-900/30 hover:border-cyan-500/30 transition">
+      <div className="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center mb-4">
+        {icon}
+      </div>
+      <h4 className="font-bold mb-2 text-white">{title}</h4>
+      <p className="text-sm text-gray-400">{description}</p>
+    </div>
+  );
+}
+
+interface TagBadgeProps {
+  children: ReactNode;
+  variant: "cyan" | "purple";
+}
+
+const TAG_VARIANT_CLASSES: Record<TagBadgeProps["variant"], string> = {
+  cyan: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
+  purple: "bg-purple-500/20 text-purple-300 border-purple-500/30",
+};
+
+function TagBadge({ children, variant }: TagBadgeProps) {
+  return (
+    <span className={`px-3 py-1 text-xs rounded-full border ${TAG_VARIANT_CLASSES[variant]}`}>
+      {children}
+    </span>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-gray-100 overflow-hidden">
+    <PageLayout className="overflow-hidden">
       {/* Animated background grid */}
       <div className="fixed inset-0 opacity-5 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(0deg,transparent_24%,rgba(0,217,255,0.05)_25%,rgba(0,217,255,0.05)_26%,transparent_27%,transparent_74%,rgba(0,217,255,0.05)_75%,rgba(0,217,255,0.05)_76%,transparent_77%,transparent),linear-gradient(90deg,transparent_24%,rgba(0,217,255,0.05)_25%,rgba(0,217,255,0.05)_26%,transparent_27%,transparent_74%,rgba(0,217,255,0.05)_75%,rgba(0,217,255,0.05)_76%,transparent_77%,transparent)]"
@@ -71,9 +109,9 @@ export default function Home() {
                 </p>
                 
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Strategy</span>
-                  <span className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Business Model</span>
-                  <span className="px-3 py-1 text-xs bg-cyan-500/20 text-cyan-300 rounded-full border border-cyan-500/30">Revenue</span>
+                  {["Strategy", "Business Model", "Revenue"].map((tag) => (
+                    <TagBadge key={tag} variant="cyan">{tag}</TagBadge>
+                  ))}
                 </div>
               </div>
             </a>
@@ -98,9 +136,9 @@ export default function Home() {
                 </p>
                 
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">Architecture</span>
-                  <span className="px-3 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">Infrastructure</span>
-                  <span className="px-3 py-1 text-xs bg-purple-500/20 text-purple-300 rounded-full border border-purple-500/30">Tech Stack</span>
+                  {["Architecture", "Infrastructure", "Tech Stack"].map((tag) => (
+                    <TagBadge key={tag} variant="purple">{tag}</TagBadge>
+                  ))}
                 </div>
               </div>
             </a>
@@ -108,27 +146,21 @@ export default function Home() {
 
           {/* Features Section */}
           <div className="grid md:grid-cols-3 gap-6 mb-20">
-            <div className="p-6 rounded-lg border border-gray-800 bg-slate-900/30 hover:border-cyan-500/30 transition">
-              <div className="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center mb-4">
-                <Zap className="w-5 h-5 text-cyan-400" />
-              </div>
-              <h4 className="font-bold mb-2 text-white">Strategic Insight</h4>
-              <p className="text-sm text-gray-400">Comprehensive business model analysis grounded in real implementation status.</p>
-            </div>
-            <div className="p-6 rounded-lg border border-gray-800 bg-slate-900/30 hover:border-cyan-500/30 transition">
-              <div className="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center mb-4">
-                <Code2 className="w-5 h-5 text-cyan-400" />
-              </div>
-              <h4 className="font-bold mb-2 text-white">Technical Excellence</h4>
-              <p className="text-sm text-gray-400">Detailed architecture documentation for developers and stakeholders.</p>
-            </div>
-            <div className="p-6 rounded-lg border border-gray-800 bg-slate-900/30 hover:border-cyan-500/30 transition">
-              <div className="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center mb-4">
-                <Grid3x3 className="w-5 h-5 text-cyan-400" />
-              </div>
-              <h4 className="font-bold mb-2 text-white">Integrated Platform</h4>
-              <p className="text-sm text-gray-400">Seamless navigation between strategy and implementation details.</p>
-            </div>
+            <FeatureCard
+              icon={<Zap className="w-5 h-5 text-cyan-400" />}
+              title="Strategic Insight"
+              description="Comprehensive business model analysis grounded in real implementation status."
+            />
+            <FeatureCard
+              icon={<Code2 className="w-5 h-5 text-cyan-400" />}
+              title="Technical Excellence"
+              description="Detailed architecture documentation for developers and stakeholders."
+            />
+            <FeatureCard
+              icon={<Grid3x3 className="w-5 h-5 text-cyan-400" />}
+              title="Integrated Platform"
+              description="Seamless navigation between strategy and implementation details."
+            />
           </div>
         </section>
 
@@ -172,6 +204,6 @@ export default function Home() {
           </div>
         </footer>
       </div>
-    </div>
+    </PageLayout>
   );
 }
