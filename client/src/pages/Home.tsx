@@ -10,9 +10,33 @@ export default function Home() {
         />
       </div>
 
-      {/* Glowing orbs */}
-      <div className="fixed top-20 left-10 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
-      <div className="fixed bottom-20 right-10 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+      {/* Glowing orbs - optimized with will-change and opacity-based animation */}
+      <div
+        className="fixed top-20 left-10 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl"
+        style={{
+          animation: "pulse-opacity 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+          willChange: "opacity"
+        }}
+      />
+      <div
+        className="fixed bottom-20 right-10 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"
+        style={{
+          animation: "pulse-opacity 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+          animationDelay: "1s",
+          willChange: "opacity"
+        }}
+      />
+
+      <style>{`
+        @keyframes pulse-opacity {
+          0%, 100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.5;
+          }
+        }
+      `}</style>
 
       {/* Content */}
       <div className="relative z-10">
