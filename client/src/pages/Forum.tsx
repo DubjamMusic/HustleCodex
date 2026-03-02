@@ -1,9 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback, memo } from "react";
 import { MessageCircle, Send, Users, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+const MAX_MESSAGES = 100;
+const MAX_FORUM_POSTS = 50;
 
 interface Message {
   id: string;
@@ -20,6 +23,73 @@ interface ForumPost {
   timestamp: Date;
   replies: number;
 }
+
+// Memoized time formatter to avoid recreating on each render
+const timeFormatter = new Intl.DateTimeFormat("en-US", {
+  hour: "2-digit",
+  minute: "2-digit",
+});
+
+// Memoized message item component
+const MessageItem = memo<{ message: Message; username: string }>(
+  ({ message, username }) => {
+    const formattedTime = useMemo(
+      () => timeFormatter.format(message.timestamp),
+      [message.timestamp]
+    );
+
+    return (
+      <div
+        className={`p-3 rounded-lg ${
+          message.username === "System"
+            ? "bg-purple-500/10 border border-purple-500/30 text-center text-purple-300 text-sm italic"
+            : message.username === username
+              ? "bg-cyan-500/10 border border-cyan-500/30 ml-8"
+              : "bg-slate-800/50 border border-slate-700/50 mr-8"
+        }`}
+      >
+        {message.username !== "System" && (
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-xs font-semibold text-cyan-400">
+              {message.username}
+            </span>
+            <span className="text-xs text-gray-500">{formattedTime}</span>
+          </div>
+        )}
+        <p className="text-sm text-gray-300 break-words">{message.content}</p>
+      </div>
+    );
+  }
+);
+MessageItem.displayName = "MessageItem";
+
+// Memoized forum post item component
+const ForumPostItem = memo<{ post: ForumPost }>(({ post }) => {
+  const formattedTime = useMemo(
+    () => timeFormatter.format(post.timestamp),
+    [post.timestamp]
+  );
+
+  return (
+    <Card className="bg-slate-900/50 border-cyan-500/20 hover:border-cyan-500/40 transition cursor-pointer">
+      <CardContent className="pt-6">
+        <div className="flex items-start justify-between mb-3">
+          <h3 className="text-lg font-bold text-white">{post.title}</h3>
+          <div className="flex items-center gap-1 text-xs text-gray-500">
+            <Clock className="w-3 h-3" />
+            <span>{formattedTime}</span>
+          </div>
+        </div>
+        <p className="text-gray-400 mb-3">{post.content}</p>
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-cyan-400">by {post.author}</span>
+          <span className="text-gray-500">{post.replies} replies</span>
+        </div>
+      </CardContent>
+    </Card>
+  );
+});
+ForumPostItem.displayName = "ForumPostItem";
 
 export default function Forum() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -41,15 +111,15 @@ export default function Forum() {
   const [showNewPostForm, setShowNewPostForm] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
-  const handleSetUsername = (e: React.FormEvent) => {
+  const handleSetUsername = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (username.trim()) {
       setIsUsernameSet(true);
@@ -60,11 +130,14 @@ export default function Forum() {
         content: `${username} has joined the chat!`,
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, welcomeMsg]);
+      setMessages((prev) => {
+        const updated = [...prev, welcomeMsg];
+        return updated.length > MAX_MESSAGES ? updated.slice(-MAX_MESSAGES) : updated;
+      });
     }
-  };
+  }, [username]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (newMessage.trim() && username) {
       const message: Message = {
@@ -73,12 +146,15 @@ export default function Forum() {
         content: newMessage,
         timestamp: new Date(),
       };
-      setMessages((prev) => [...prev, message]);
+      setMessages((prev) => {
+        const updated = [...prev, message];
+        return updated.length > MAX_MESSAGES ? updated.slice(-MAX_MESSAGES) : updated;
+      });
       setNewMessage("");
     }
-  };
+  }, [newMessage, username]);
 
-  const handleCreatePost = (e: React.FormEvent) => {
+  const handleCreatePost = useCallback((e: React.FormEvent) => {
     e.preventDefault();
     if (newPostTitle.trim() && newPostContent.trim() && username) {
       const post: ForumPost = {
@@ -89,12 +165,15 @@ export default function Forum() {
         timestamp: new Date(),
         replies: 0,
       };
-      setForumPosts((prev) => [post, ...prev]);
+      setForumPosts((prev) => {
+        const updated = [post, ...prev];
+        return updated.length > MAX_FORUM_POSTS ? updated.slice(0, MAX_FORUM_POSTS) : updated;
+      });
       setNewPostTitle("");
       setNewPostContent("");
       setShowNewPostForm(false);
     }
-  };
+  }, [newPostTitle, newPostContent, username]);
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString("en-US", {
@@ -220,25 +299,7 @@ export default function Forum() {
             )}
 
             {forumPosts.map((post) => (
-              <Card
-                key={post.id}
-                className="bg-slate-900/50 border-cyan-500/20 hover:border-cyan-500/40 transition cursor-pointer"
-              >
-                <CardContent className="pt-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-lg font-bold text-white">{post.title}</h3>
-                    <div className="flex items-center gap-1 text-xs text-gray-500">
-                      <Clock className="w-3 h-3" />
-                      <span>{formatTime(post.timestamp)}</span>
-                    </div>
-                  </div>
-                  <p className="text-gray-400 mb-3">{post.content}</p>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-cyan-400">by {post.author}</span>
-                    <span className="text-gray-500">{post.replies} replies</span>
-                  </div>
-                </CardContent>
-              </Card>
+              <ForumPostItem key={post.id} post={post} />
             ))}
           </div>
 
@@ -255,30 +316,11 @@ export default function Forum() {
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto mb-4 space-y-3">
                   {messages.map((message) => (
-                    <div
+                    <MessageItem
                       key={message.id}
-                      className={`p-3 rounded-lg ${
-                        message.username === "System"
-                          ? "bg-purple-500/10 border border-purple-500/30 text-center text-purple-300 text-sm italic"
-                          : message.username === username
-                            ? "bg-cyan-500/10 border border-cyan-500/30 ml-8"
-                            : "bg-slate-800/50 border border-slate-700/50 mr-8"
-                      }`}
-                    >
-                      {message.username !== "System" && (
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs font-semibold text-cyan-400">
-                            {message.username}
-                          </span>
-                          <span className="text-xs text-gray-500">
-                            {formatTime(message.timestamp)}
-                          </span>
-                        </div>
-                      )}
-                      <p className="text-sm text-gray-300 break-words">
-                        {message.content}
-                      </p>
-                    </div>
+                      message={message}
+                      username={username}
+                    />
                   ))}
                   <div ref={messagesEndRef} />
                 </div>
