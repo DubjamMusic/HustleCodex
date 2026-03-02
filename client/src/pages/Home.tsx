@@ -3,16 +3,23 @@ import { ArrowRight, Zap, Grid3x3, Code2 } from "lucide-react";
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-gray-100 overflow-hidden">
-      {/* Animated background grid */}
+      {/* Animated background grid - static to reduce repaints */}
       <div className="fixed inset-0 opacity-5 pointer-events-none">
         <div className="absolute inset-0 bg-[linear-gradient(0deg,transparent_24%,rgba(0,217,255,0.05)_25%,rgba(0,217,255,0.05)_26%,transparent_27%,transparent_74%,rgba(0,217,255,0.05)_75%,rgba(0,217,255,0.05)_76%,transparent_77%,transparent),linear-gradient(90deg,transparent_24%,rgba(0,217,255,0.05)_25%,rgba(0,217,255,0.05)_26%,transparent_27%,transparent_74%,rgba(0,217,255,0.05)_75%,rgba(0,217,255,0.05)_76%,transparent_77%,transparent)]"
           style={{ backgroundSize: "60px 60px" }}
         />
       </div>
 
-      {/* Glowing orbs */}
-      <div className="fixed top-20 left-10 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
-      <div className="fixed bottom-20 right-10 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+      {/* Glowing orbs - optimized with will-change and transform for GPU acceleration */}
+      <div className="fixed top-20 left-10 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl opacity-50" style={{ willChange: "opacity", animation: "pulse-opacity 3s ease-in-out infinite" }} />
+      <div className="fixed bottom-20 right-10 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl opacity-50" style={{ willChange: "opacity", animation: "pulse-opacity 3s ease-in-out 1.5s infinite" }} />
+
+      <style>{`
+        @keyframes pulse-opacity {
+          0%, 100% { opacity: 0.3; }
+          50% { opacity: 0.5; }
+        }
+      `}</style>
 
       {/* Content */}
       <div className="relative z-10">

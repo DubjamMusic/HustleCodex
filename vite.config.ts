@@ -1,7 +1,8 @@
 import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import fs from "node:fs";
+import fs from "node:fs/promises";
+import fsSync from "node:fs";
 import path from "node:path";
 import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
@@ -9,6 +10,7 @@ import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 // =============================================================================
 // Manus Debug Collector - Vite Plugin
 // Writes browser logs directly to files, trimmed when exceeding size limit
+// Optimized with async file I/O to prevent event loop blocking
 // =============================================================================
 
 const PROJECT_ROOT = import.meta.dirname;
@@ -18,19 +20,23 @@ const TRIM_TARGET_BYTES = Math.floor(MAX_LOG_SIZE_BYTES * 0.6); // Trim to 60% t
 
 type LogSource = "browserConsole" | "networkRequests" | "sessionReplay";
 
-function ensureLogDir() {
-  if (!fs.existsSync(LOG_DIR)) {
-    fs.mkdirSync(LOG_DIR, { recursive: true });
+async function ensureLogDir() {
+  try {
+    await fs.access(LOG_DIR);
+  } catch {
+    await fs.mkdir(LOG_DIR, { recursive: true });
   }
 }
 
-function trimLogFile(logPath: string, maxSize: number) {
+async function trimLogFile(logPath: string, maxSize: number) {
   try {
-    if (!fs.existsSync(logPath) || fs.statSync(logPath).size <= maxSize) {
+    const stats = await fs.stat(logPath);
+    if (stats.size <= maxSize) {
       return;
     }
 
-    const lines = fs.readFileSync(logPath, "utf-8").split("\n");
+    const content = await fs.readFile(logPath, "utf-8");
+    const lines = content.split("\n");
     const keptLines: string[] = [];
     let keptBytes = 0;
 
@@ -43,16 +49,16 @@ function trimLogFile(logPath: string, maxSize: number) {
       keptBytes += lineBytes;
     }
 
-    fs.writeFileSync(logPath, keptLines.join("\n"), "utf-8");
+    await fs.writeFile(logPath, keptLines.join("\n"), "utf-8");
   } catch {
     /* ignore trim errors */
   }
 }
 
-function writeToLogFile(source: LogSource, entries: unknown[]) {
+async function writeToLogFile(source: LogSource, entries: unknown[]) {
   if (entries.length === 0) return;
 
-  ensureLogDir();
+  await ensureLogDir();
   const logPath = path.join(LOG_DIR, `${source}.log`);
 
   // Format entries with timestamps
@@ -61,11 +67,13 @@ function writeToLogFile(source: LogSource, entries: unknown[]) {
     return `[${ts}] ${JSON.stringify(entry)}`;
   });
 
-  // Append to log file
-  fs.appendFileSync(logPath, `${lines.join("\n")}\n`, "utf-8");
+  // Append to log file asynchronously
+  await fs.appendFile(logPath, `${lines.join("\n")}\n`, "utf-8");
 
-  // Trim if exceeds max size
-  trimLogFile(logPath, MAX_LOG_SIZE_BYTES);
+  // Trim if exceeds max size (fire and forget to avoid blocking)
+  trimLogFile(logPath, MAX_LOG_SIZE_BYTES).catch(() => {
+    /* ignore trim errors */
+  });
 }
 
 /**
@@ -104,30 +112,36 @@ function vitePluginManusDebugCollector(): Plugin {
           return next();
         }
 
-        const handlePayload = (payload: any) => {
-          // Write logs directly to files
-          if (payload.consoleLogs?.length > 0) {
-            writeToLogFile("browserConsole", payload.consoleLogs);
-          }
-          if (payload.networkRequests?.length > 0) {
-            writeToLogFile("networkRequests", payload.networkRequests);
-          }
-          if (payload.sessionEvents?.length > 0) {
-            writeToLogFile("sessionReplay", payload.sessionEvents);
-          }
+        const handlePayload = async (payload: any) => {
+          try {
+            // Write logs asynchronously to avoid blocking the event loop
+            const writePromises = [];
+            if (payload.consoleLogs?.length > 0) {
+              writePromises.push(writeToLogFile("browserConsole", payload.consoleLogs));
+            }
+            if (payload.networkRequests?.length > 0) {
+              writePromises.push(writeToLogFile("networkRequests", payload.networkRequests));
+            }
+            if (payload.sessionEvents?.length > 0) {
+              writePromises.push(writeToLogFile("sessionReplay", payload.sessionEvents));
+            }
 
-          res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(JSON.stringify({ success: true }));
+            await Promise.all(writePromises);
+
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ success: true }));
+          } catch (e) {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ success: false, error: String(e) }));
+          }
         };
 
         const reqBody = (req as { body?: unknown }).body;
         if (reqBody && typeof reqBody === "object") {
-          try {
-            handlePayload(reqBody);
-          } catch (e) {
+          handlePayload(reqBody).catch((e) => {
             res.writeHead(400, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ success: false, error: String(e) }));
-          }
+          });
           return;
         }
 
@@ -139,7 +153,10 @@ function vitePluginManusDebugCollector(): Plugin {
         req.on("end", () => {
           try {
             const payload = JSON.parse(body);
-            handlePayload(payload);
+            handlePayload(payload).catch((e) => {
+              res.writeHead(400, { "Content-Type": "application/json" });
+              res.end(JSON.stringify({ success: false, error: String(e) }));
+            });
           } catch (e) {
             res.writeHead(400, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ success: false, error: String(e) }));
