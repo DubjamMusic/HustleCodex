@@ -23,8 +23,8 @@ function Dialog({
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Root>) {
   const composingRef = React.useRef(false);
-  const justEndedRef = React.useRef(false);
-  const endTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasCompositionJustEndedRef = React.useRef(false);
+  const compositionResetTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const contextValue = React.useMemo(
     () => ({
@@ -32,14 +32,14 @@ function Dialog({
       setComposing: (composing: boolean) => {
         composingRef.current = composing;
       },
-      justEndedComposing: () => justEndedRef.current,
+      justEndedComposing: () => hasCompositionJustEndedRef.current,
       markCompositionEnd: () => {
-        justEndedRef.current = true;
-        if (endTimerRef.current) {
-          clearTimeout(endTimerRef.current);
+        hasCompositionJustEndedRef.current = true;
+        if (compositionResetTimerRef.current) {
+          clearTimeout(compositionResetTimerRef.current);
         }
-        endTimerRef.current = setTimeout(() => {
-          justEndedRef.current = false;
+        compositionResetTimerRef.current = setTimeout(() => {
+          hasCompositionJustEndedRef.current = false;
         }, 150);
       },
     }),
