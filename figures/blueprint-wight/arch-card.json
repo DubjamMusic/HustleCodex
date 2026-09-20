@@ -1,0 +1,25 @@
+{
+  "figureId": "blueprint-wight",
+  "codename": "BLUEPRINT-WIGHT-09",
+  "waveId": "2026-09-20-e-ember",
+  "repo": "DubjamMusic/HustleCodex",
+  "panes": [
+    {
+      "id": "architecture",
+      "path": "client/public/architecture.html",
+      "minBytes": 1000,
+      "role": "technical blueprint"
+    },
+    {
+      "id": "business-model",
+      "path": "client/public/business-model.html",
+      "minBytes": 1000,
+      "role": "go-to-market brief"
+    }
+  ],
+  "pages": [
+    "client/src/pages/Home.tsx",
+    "client/src/pages/Forum.tsx"
+  ],
+  "lever": "N"
+}
