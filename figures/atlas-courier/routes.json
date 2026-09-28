@@ -1,0 +1,36 @@
+{
+  "figureId": "atlas-courier",
+  "codename": "ATLAS-COURIER-28",
+  "waveId": "2026-09-28-m-relay",
+  "repo": "DubjamMusic/HustleCodex",
+  "role": "Relay first-party dashboard routes without rewriting public HTML.",
+  "routes": [
+    {
+      "id": "home",
+      "page": "client/src/pages/Home.tsx",
+      "outcome": "Landing pane stays the density entry, not a second orchestrator."
+    },
+    {
+      "id": "forum",
+      "page": "client/src/pages/Forum.tsx",
+      "outcome": "Forum stays a discussion surface; no boardroom enum tokens."
+    }
+  ],
+  "briefs": [
+    {
+      "id": "architecture",
+      "path": "client/public/architecture.html",
+      "minBytes": 1000
+    },
+    {
+      "id": "business-model",
+      "path": "client/public/business-model.html",
+      "minBytes": 1000
+    }
+  ],
+  "offRosterThisWave": ["storm-scout", "dial-wright", "cirrus-steward", "blueprint-wight"],
+  "bannedTokens": ["planner", "executor", "monitor", "data_agent"],
+  "frozen": ["affirmAgent.ts", "challengeAgent.ts"],
+  "mergePolicy": "pr-only",
+  "lever": "N"
+}
